@@ -1,43 +1,33 @@
 package com.example.restcoreografia.controller;
 
-import com.example.restcoreografia.model.HistorialMedico;
-import org.springframework.kafka.core.KafkaTemplate;
+import com.example.restcoreografia.model.Examen;
+import com.example.restcoreografia.producer.LaboratorioProducer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
-@RequestMapping("/V1/pacientes")
+@RequestMapping("/V1/api/laboratorio")
 public class LaboratorioController {
 
-    private final KafkaTemplate<String, String> kafkaTemplate;
-    private final Map<String, HistorialMedico> store = new HashMap<>();
-    private static final String TOPIC = "coreografia-topic";
+    private Map<Long, List<Examen>> examenes = new HashMap<>();
+    private Long idCounter = 1L;
 
-    public LaboratorioController(KafkaTemplate<String, String> kafkaTemplate) {
-        this.kafkaTemplate = kafkaTemplate;
+    @Autowired
+    private LaboratorioProducer producer;
+
+    @PostMapping("/{pacienteId}")
+    public Examen registrar(@PathVariable Long pacienteId, @RequestBody Examen examen) {
+        examen.setId(idCounter++);
+        examen.setPacienteId(pacienteId);
+        examenes.computeIfAbsent(pacienteId, k -> new ArrayList<>()).add(examen);
+        producer.enviarResultadoDisponible(examen);
+        return examen;
     }
 
-    @PostMapping
-    public HistorialMedico crearPaciente(@RequestBody HistorialMedico historial) {
-        String id = UUID.randomUUID().toString();
-        historial.setId(id);
-        store.put(id, historial);
-        kafkaTemplate.send(TOPIC, "Nuevo historial creado: " + id);
-        return historial;
-    }
-
-    @GetMapping("/{id}")
-    public HistorialMedico  consultarPaciente(@PathVariable String id) {
-        System.out.println("TEST Jefferson");
-        return store.get(id);
-    }
-
-    @GetMapping("/{id}")
-    public HistorialMedico actualizarPaciente(@PathVariable String id) {
-        System.out.println("TEST Jefferson");
-        return store.get(id);
+    @GetMapping("/{pacienteId}")
+    public List<Examen> listar(@PathVariable Long pacienteId) {
+        return examenes.getOrDefault(pacienteId, new ArrayList<>());
     }
 }

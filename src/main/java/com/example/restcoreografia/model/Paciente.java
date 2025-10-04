@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @Data   // Genera getters, setters, toString, equals, hashCode
 @NoArgsConstructor  // Genera constructor vacío
 @AllArgsConstructor // Genera constructor con todos los argumentos
-public class HistorialMedico {
+public class Paciente {
     private Long id;
-    private Long pacienteId;
-    private String diagnostico;
-    private String fecha;
+    private String nombre;
+    private String documento;
+    private String email;
 }

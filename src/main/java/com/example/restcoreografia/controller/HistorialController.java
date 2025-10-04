@@ -1,43 +1,48 @@
 package com.example.restcoreografia.controller;
 
 import com.example.restcoreografia.model.HistorialMedico;
-import org.springframework.kafka.core.KafkaTemplate;
+import jakarta.annotation.PostConstruct;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
-@RequestMapping("/V1/pacientes")
+@RequestMapping("/V1/api/historial")
 public class HistorialController {
 
-    private final KafkaTemplate<String, String> kafkaTemplate;
-    private final Map<String, HistorialMedico> store = new HashMap<>();
-    private static final String TOPIC = "coreografia-topic";
+    private Map<Long, List<HistorialMedico>> historiales = new HashMap<>();
 
-    public HistorialController(KafkaTemplate<String, String> kafkaTemplate) {
-        this.kafkaTemplate = kafkaTemplate;
+    private Long idCounter = 7L;
+
+    @PostMapping("/{pacienteId}")
+    public HistorialMedico agregar(@PathVariable Long pacienteId, @RequestBody HistorialMedico h) {
+        h.setId(idCounter++);
+        h.setPacienteId(pacienteId);
+        historiales.computeIfAbsent(pacienteId, k -> new ArrayList<>()).add(h);
+        return h;
     }
 
-    @PostMapping
-    public HistorialMedico crearPaciente(@RequestBody HistorialMedico historial) {
-        String id = UUID.randomUUID().toString();
-        historial.setId(id);
-        store.put(id, historial);
-        kafkaTemplate.send(TOPIC, "Nuevo historial creado: " + id);
-        return historial;
+    @GetMapping("/{pacienteId}")
+    public List<HistorialMedico> listar(@PathVariable Long pacienteId) {
+        return historiales.getOrDefault(pacienteId, Collections.emptyList());
     }
 
-    @GetMapping("/{id}")
-    public HistorialMedico  consultarPaciente(@PathVariable String id) {
-        System.out.println("TEST Jefferson");
-        return store.get(id);
-    }
+    @PostConstruct
+    public void initMockData() {
+        List<HistorialMedico> historial1 = new ArrayList<>();
+        historial1.add(new HistorialMedico(1L, 1L, "Gripe común", "2024-09-01"));
+        historial1.add(new HistorialMedico(2L, 1L, "Chequeo anual", "2024-10-15"));
 
-    @GetMapping("/{id}")
-    public HistorialMedico actualizarPaciente(@PathVariable String id) {
-        System.out.println("TEST Jefferson");
-        return store.get(id);
+        List<HistorialMedico> historial2 = new ArrayList<>();
+        historial2.add(new HistorialMedico(3L, 2L, "Hipertensión", "2024-08-12"));
+        historial2.add(new HistorialMedico(4L, 2L, "Examen de laboratorio: colesterol alto", "2024-09-20"));
+
+        List<HistorialMedico> historial3 = new ArrayList<>();
+        historial3.add(new HistorialMedico(5L, 3L, "Fractura de brazo", "2024-07-10"));
+        historial3.add(new HistorialMedico(6L, 3L, "Rehabilitación física", "2024-08-05"));
+
+        historiales.put(1L, historial1);
+        historiales.put(2L, historial2);
+        historiales.put(3L, historial3);
     }
 }

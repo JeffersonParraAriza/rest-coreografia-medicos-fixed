@@ -1,9 +1,7 @@
 package com.example.restcoreografia.controller;
 
 import com.example.restcoreografia.model.Paciente;
-import com.example.restcoreografia.producer.PacienteProducer;
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +14,6 @@ public class PacienteController {
 
     private Map<Long, Paciente> pacientes = new HashMap<>();
     private Long idCounter = 4L;
-
-    @Autowired
-    private PacienteProducer producer;
 
     @PostMapping
     public Paciente crearPaciente(@RequestBody Paciente paciente) {

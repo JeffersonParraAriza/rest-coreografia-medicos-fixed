@@ -1,9 +1,7 @@
 package com.example.restcoreografia.controller;
 
 import com.example.restcoreografia.model.Examen;
-import com.example.restcoreografia.producer.LaboratorioProducer;
 import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -15,18 +13,11 @@ public class LaboratorioController {
     private Map<Long, List<Examen>> examenes = new HashMap<>();
     private Long idCounter = 4L; // tenemos 3 mocks precargados
 
-    @Autowired
-    private LaboratorioProducer producer;
-
     @PostMapping("/ordenes/{pacienteId}")
     public Examen registrarLaboratorio(@PathVariable Long pacienteId, @RequestBody Examen examen) {
         examen.setId(idCounter++);
         examen.setPacienteId(pacienteId);
         examenes.computeIfAbsent(pacienteId, k -> new ArrayList<>()).add(examen);
-
-        // Publicar evento de resultado disponible
-        producer.enviarResultadoDisponible(examen);
-
         return examen;
     }
 

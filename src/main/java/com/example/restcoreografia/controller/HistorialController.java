@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
+import org.springframework.http.ResponseEntity;
+import org.springframework.http.HttpStatus;
+
 @RestController
 @RequestMapping("/historias")
 public class HistorialController {
@@ -15,8 +18,14 @@ public class HistorialController {
     private Long idCounter = 7L;
 
     @GetMapping("/{pacienteId}")
-    public List<HistorialMedico> obtenerHistorialDePaciente(@PathVariable Long pacienteId) {
-        return historiales.getOrDefault(pacienteId, Collections.emptyList());
+    public ResponseEntity<?> obtenerHistorialDePaciente(@PathVariable Long pacienteId) {
+        List<HistorialMedico> historial = historiales.getOrDefault(pacienteId, Collections.emptyList());
+        if (historial.isEmpty()) {
+            Map<String, String> response = new HashMap<>();
+            response.put("mensaje", "No se encontró ningún registro para el paciente: " + pacienteId);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
+        return ResponseEntity.ok(historial);
     }
 
     @PostMapping("/{pacienteId}/nota")

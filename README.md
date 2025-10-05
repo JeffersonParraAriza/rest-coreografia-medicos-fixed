@@ -26,3 +26,6 @@ curl --location 'http://localhost:8080/V1/api/laboratorio/2' \
 "fecha": "2024-11-01"
 }'
 
+
+servidor:
+https://rest-coreografia-medicos-fixed.onrender.com

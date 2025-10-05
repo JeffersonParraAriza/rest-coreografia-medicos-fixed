@@ -1,3 +1,10 @@
+com/example/restcoreografia/producer/PacienteProducer.class
 com/example/restcoreografia/RestCoreografiaMedicosApplication.class
+com/example/restcoreografia/producer/LaboratorioProducer.class
 com/example/restcoreografia/model/HistorialMedico.class
+com/example/restcoreografia/controller/LaboratorioController.class
 com/example/restcoreografia/controller/HistorialController.class
+com/example/restcoreografia/model/Paciente.class
+com/example/restcoreografia/consumer/PacienteConsumer.class
+com/example/restcoreografia/model/Examen.class
+com/example/restcoreografia/controller/PacienteController.class

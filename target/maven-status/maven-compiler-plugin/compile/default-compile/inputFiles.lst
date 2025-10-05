@@ -1,3 +1,10 @@
 /Users/usolibre/Downloads/ArquitecturaSoftware/rest-coreografia-medicos-fixed/src/main/java/com/example/restcoreografia/RestCoreografiaMedicosApplication.java
+/Users/usolibre/Downloads/ArquitecturaSoftware/rest-coreografia-medicos-fixed/src/main/java/com/example/restcoreografia/consumer/PacienteConsumer.java
 /Users/usolibre/Downloads/ArquitecturaSoftware/rest-coreografia-medicos-fixed/src/main/java/com/example/restcoreografia/controller/HistorialController.java
+/Users/usolibre/Downloads/ArquitecturaSoftware/rest-coreografia-medicos-fixed/src/main/java/com/example/restcoreografia/controller/LaboratorioController.java
+/Users/usolibre/Downloads/ArquitecturaSoftware/rest-coreografia-medicos-fixed/src/main/java/com/example/restcoreografia/controller/PacienteController.java
+/Users/usolibre/Downloads/ArquitecturaSoftware/rest-coreografia-medicos-fixed/src/main/java/com/example/restcoreografia/model/Examen.java
 /Users/usolibre/Downloads/ArquitecturaSoftware/rest-coreografia-medicos-fixed/src/main/java/com/example/restcoreografia/model/HistorialMedico.java
+/Users/usolibre/Downloads/ArquitecturaSoftware/rest-coreografia-medicos-fixed/src/main/java/com/example/restcoreografia/model/Paciente.java
+/Users/usolibre/Downloads/ArquitecturaSoftware/rest-coreografia-medicos-fixed/src/main/java/com/example/restcoreografia/producer/LaboratorioProducer.java
+/Users/usolibre/Downloads/ArquitecturaSoftware/rest-coreografia-medicos-fixed/src/main/java/com/example/restcoreografia/producer/PacienteProducer.java

@@ -7,25 +7,26 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 
 @RestController
-@RequestMapping("/V1/api/historial")
+@RequestMapping("/historias")
 public class HistorialController {
 
     private Map<Long, List<HistorialMedico>> historiales = new HashMap<>();
 
     private Long idCounter = 7L;
 
-    @PostMapping("/{pacienteId}")
-    public HistorialMedico agregar(@PathVariable Long pacienteId, @RequestBody HistorialMedico h) {
+    @GetMapping("/{pacienteId}")
+    public List<HistorialMedico> obtenerHistorialDePaciente(@PathVariable Long pacienteId) {
+        return historiales.getOrDefault(pacienteId, Collections.emptyList());
+    }
+
+    @PostMapping("/{pacienteId}/nota")
+    public HistorialMedico agregarNota(@PathVariable Long pacienteId, @RequestBody HistorialMedico h) {
         h.setId(idCounter++);
         h.setPacienteId(pacienteId);
         historiales.computeIfAbsent(pacienteId, k -> new ArrayList<>()).add(h);
         return h;
     }
 
-    @GetMapping("/{pacienteId}")
-    public List<HistorialMedico> listar(@PathVariable Long pacienteId) {
-        return historiales.getOrDefault(pacienteId, Collections.emptyList());
-    }
 
     @PostConstruct
     public void initMockData() {

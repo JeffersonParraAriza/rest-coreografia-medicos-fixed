@@ -18,7 +18,7 @@ public class LaboratorioController {
     @Autowired
     private LaboratorioProducer producer;
 
-    @PostMapping("/{pacienteId}")
+    @PostMapping("/ordenes/{pacienteId}")
     public Examen registrarLaboratorio(@PathVariable Long pacienteId, @RequestBody Examen examen) {
         examen.setId(idCounter++);
         examen.setPacienteId(pacienteId);
@@ -30,7 +30,7 @@ public class LaboratorioController {
         return examen;
     }
 
-    @GetMapping("/{pacienteId}")
+    @GetMapping("/resultados/{pacienteId}")
     public List<Examen> listar(@PathVariable Long pacienteId) {
         return examenes.getOrDefault(pacienteId, Collections.emptyList());
     }

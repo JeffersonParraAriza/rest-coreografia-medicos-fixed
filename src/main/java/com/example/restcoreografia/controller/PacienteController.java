@@ -4,12 +4,14 @@ import com.example.restcoreografia.model.Paciente;
 import com.example.restcoreografia.producer.PacienteProducer;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
 
 @RestController
-@RequestMapping("/V1/api/pacientes")
+@RequestMapping("/pacientes")
 public class PacienteController {
 
     private Map<Long, Paciente> pacientes = new HashMap<>();
@@ -19,24 +21,28 @@ public class PacienteController {
     private PacienteProducer producer;
 
     @PostMapping
-    public Paciente crear(@RequestBody Paciente paciente) {
+    public Paciente crearPaciente(@RequestBody Paciente paciente) {
         paciente.setId(idCounter++);
         pacientes.put(paciente.getId(), paciente);
-
-        // publicar evento paciente-creado
-        producer.enviarPacienteCreado(paciente);
-
         return paciente;
     }
 
-    @GetMapping
-    public Collection<Paciente> listar() {
-        return pacientes.values();
+    @GetMapping("/{id}")
+    public ResponseEntity<Object> obtenerPaciente(@PathVariable Long id) {
+        Paciente paciente = pacientes.get(id);
+        if (paciente == null) {
+            Map<String, String> response = new HashMap<>();
+            response.put("mensaje", "No se encontró ningún paciente con el ID: " + id);
+            return ResponseEntity.status(HttpStatus.OK).body(response);
+        }
+        return ResponseEntity.ok(paciente);
     }
 
-    @GetMapping("/{id}")
-    public Paciente obtener(@PathVariable Long id) {
-        return pacientes.get(id);
+    @PutMapping("/{id}")
+    public Paciente actualizarPaciente(@PathVariable Long id, @RequestBody Paciente paciente) {
+        paciente.setId(id);
+        pacientes.put(id, paciente);
+        return paciente;
     }
 
     @PostConstruct

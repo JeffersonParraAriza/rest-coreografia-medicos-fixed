@@ -17,4 +17,4 @@ RUN mvn clean package -DskipTests
 EXPOSE 8080
 
 # Ejecutar el jar (usa * si no sabes el nombre exacto)
-CMD ["java", "-jar", "target/*.jar"]
+CMD java -jar target/rest-coreografia-medicos-1.0.0.jar

@@ -15,7 +15,7 @@ import java.util.*;
 public class PacienteController {
 
     private Map<Long, Paciente> pacientes = new HashMap<>();
-    private Long idCounter = 4L; // ya vamos a cargar 3 mocks
+    private Long idCounter = 4L;
 
     @Autowired
     private PacienteProducer producer;
@@ -39,10 +39,15 @@ public class PacienteController {
     }
 
     @PutMapping("/{id}")
-    public Paciente actualizarPaciente(@PathVariable Long id, @RequestBody Paciente paciente) {
+    public ResponseEntity<Object> actualizarPaciente(@PathVariable Long id, @RequestBody Paciente paciente) {
+        if (!pacientes.containsKey(id)) {
+            Map<String, String> response = new HashMap<>();
+            response.put("mensaje", "No se puede actualizar. No existe un paciente con el ID: " + id);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
         paciente.setId(id);
         pacientes.put(id, paciente);
-        return paciente;
+        return ResponseEntity.ok(paciente);
     }
 
     @PostConstruct
